@@ -7,19 +7,22 @@ import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
 @Component
 public class JwtUtil {
 
-    private final SecretKey key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
+    // Заменить эту строку на что-то сложное и уникальное
+    private static final String SECRET = "Wn5j8A1zH0mL9xVbQ2eR7sYkUwTmP3NzDfGhJxKlZ0o=";
+    private final SecretKey key = Keys.hmacShaKeyFor(SECRET.getBytes(StandardCharsets.UTF_8));
     private final long jwtExpirationMs = 86400000;
 
     public String generateToken(String username) {
         return Jwts.builder()
                 .setSubject(username)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
+                .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
     }
