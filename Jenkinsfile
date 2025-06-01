@@ -32,6 +32,31 @@ pipeline {
                 archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
             }
         }
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    def imageName = "spring-app:latest"
+                    sh "docker build -t ${imageName} ."
+                    echo "Docker image ${imageName} built."
+                }
+            }
+        }
+
+        stage('Deploy to Minikube') {
+            steps {
+                script {
+                    sh 'kubectl apply -f k8s/deployment.yaml'
+                    sh 'kubectl apply -f k8s/service.yaml'
+
+                    timeout(time: 5, unit: 'MINUTES') {
+                        sh 'kubectl rollout status deployment/spring-app-deployment --watch=true'
+                    }
+
+                    echo "Application deployed to Minikube."
+                }
+            }
+        }
     }
 
     post {
