@@ -10,20 +10,19 @@ pipeline {
 
         stage('Build') {
             steps {
-                bat 'chmod +x mvnw' // можна прибрати, якщо не має значення
-                bat '.\\mvnw.cmd clean compile'
+                bat './mvnw clean compile'
             }
         }
 
         stage('Test') {
             steps {
-                bat '.\\mvnw.cmd test'
+                bat './mvnw test'
             }
         }
 
         stage('Package') {
             steps {
-                bat '.\\mvnw.cmd package -DskipTests'
+                bat './mvnw package -DskipTests'
             }
         }
 
