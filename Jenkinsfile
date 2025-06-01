@@ -10,20 +10,20 @@ pipeline {
 
         stage('Build') {
             steps {
-                sh 'chmod +x mvnw'
-                sh './mvnw clean compile'
+                bat 'chmod +x mvnw' // можна прибрати, якщо не має значення
+                bat '.\\mvnw.cmd clean compile'
             }
         }
 
         stage('Test') {
             steps {
-                sh './mvnw test'
+                bat '.\\mvnw.cmd test'
             }
         }
 
         stage('Package') {
             steps {
-                sh './mvnw package -DskipTests'
+                bat '.\\mvnw.cmd package -DskipTests'
             }
         }
 
@@ -37,7 +37,7 @@ pipeline {
             steps {
                 script {
                     def imageName = "spring-app:latest"
-                    sh "docker build -t ${imageName} ."
+                    bat "docker build -t ${imageName} ."
                     echo "Docker image ${imageName} built."
                 }
             }
@@ -46,11 +46,11 @@ pipeline {
         stage('Deploy to Minikube') {
             steps {
                 script {
-                    sh 'kubectl apply -f k8s/deployment.yaml'
-                    sh 'kubectl apply -f k8s/service.yaml'
+                    bat 'kubectl apply -f k8s\\deployment.yaml'
+                    bat 'kubectl apply -f k8s\\service.yaml'
 
                     timeout(time: 5, unit: 'MINUTES') {
-                        sh 'kubectl rollout status deployment/spring-app-deployment --watch=true'
+                        bat 'kubectl rollout status deployment/spring-app-deployment --watch=true'
                     }
 
                     echo "Application deployed to Minikube."
