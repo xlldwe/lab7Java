@@ -14,7 +14,7 @@ import java.util.Date;
 public class JwtUtil {
 
     // Заменить эту строку на что-то сложное и уникальное
-    private static final String SECRET = "Wn5j8A1zH0mL9xVbQ2eR7sYkUwTmP3NzDfGhJxKlZ0o=";
+    private static final String SECRET = "Ff3xLbAqU84yPzMvJkTgZrYxNcVbLmKoIqWsEdRtYhGuJiKlQwErTyUiOpAsDfGhJ";
     private final SecretKey key = Keys.hmacShaKeyFor(SECRET.getBytes(StandardCharsets.UTF_8));
     private final long jwtExpirationMs = 86400000;
 
